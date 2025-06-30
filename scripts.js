@@ -38,53 +38,52 @@
       });
     });
 
-    // Contact form submission
     document.getElementById('contactForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const formData = new FormData(this);
-      const successAlert = document.getElementById('successAlert');
-      const errorAlert = document.getElementById('errorAlert');
-      
-      // Hide previous alerts
-      successAlert.classList.add('d-none');
-      errorAlert.classList.add('d-none');
-      
-      // Get form data
-      const name = formData.get('name');
-      const email = formData.get('email');
-      const phone = formData.get('phone');
-      const service = formData.get('service');
-      const message = formData.get('message');
-      
-      // Create mailto link
-      const subject = Consulta de ${name} - ${service || 'Servicio general'};
-      const body = Nombre: ${name}
+  e.preventDefault();
+  
+  const formData = new FormData(this);
+  const successAlert = document.getElementById('successAlert');
+  const errorAlert = document.getElementById('errorAlert');
+  
+  // Hide previous alerts
+  successAlert.classList.add('d-none');
+  errorAlert.classList.add('d-none');
+  
+  // Get form data
+  const name = formData.get('name');
+  const email = formData.get('email');
+  const phone = formData.get('phone');
+  const service = formData.get('service');
+  const message = formData.get('message');
+  
+  // Create mailto link
+  const subject = `Consulta de ${name} - ${service || 'Servicio general'}`;
+  const body = `Nombre: ${name}
 Email: ${email}
 Teléfono: ${phone || 'No proporcionado'}
 Servicio de interés: ${service || 'No especificado'}
 
 Mensaje:
-${message};
-      
-      const mailtoLink = mailto:info@filaprint3d.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)};
-      
-      try {
-        // Open email client
-        window.location.href = mailtoLink;
-        
-        // Show success message
-        successAlert.classList.remove('d-none');
-        
-        // Reset form
-        this.reset();
-        
-        // Scroll to success message
-        successAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        
-      } catch (error) {
-        // Show error message
-        errorAlert.classList.remove('d-none');
-        errorAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    });
+${message}`;
+  
+  const mailtoLink = `mailto:info@filaprint3d.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  
+  try {
+    // Open email client
+    window.location.href = mailtoLink;
+    
+    // Show success message
+    successAlert.classList.remove('d-none');
+    
+    // Reset form
+    this.reset();
+    
+    // Scroll to success message
+    successAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    
+  } catch (error) {
+    // Show error message
+    errorAlert.classList.remove('d-none');
+    errorAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+});
