@@ -325,6 +325,11 @@ font-weight: 500;
 margin-bottom: 0.5rem;
 }
 
+.contact-form .form-select option {
+  background-color: var(--dark-bg);
+  color: white;
+}
+
 /* Footer */
 .footer {
 background: #0a1520;
