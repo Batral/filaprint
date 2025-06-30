@@ -4,88 +4,751 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>FilaPrint3D - Diseño e Impresión 3D</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary-color: #29b6f6;
+      --secondary-color: #1e88e5;
+      --dark-bg: #0c1a2b;
+      --gradient-bg: linear-gradient(135deg, #0c1a2b 0%, #1e3a5f 50%, #2d5aa0 100%);
+      --light-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+
+    /* Custom Bootstrap overrides */
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      border: none;
+      border-radius: 50px;
+      padding: 12px 30px;
+      font-weight: 600;
+      box-shadow: 0 8px 25px rgba(30, 136, 229, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(30, 136, 229, 0.4);
+      background: linear-gradient(135deg, var(--secondary-color) 0%, #1565c0 100%);
+    }
+
+    /* Header */
+    .navbar {
+      background: var(--gradient-bg) !important;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(12, 26, 43, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .navbar.scrolled {
+      background: rgba(12, 26, 43, 0.95) !important;
+      backdrop-filter: blur(20px);
+    }
+
+    .navbar-brand img {
+      height: 45px;
+      transition: transform 0.3s ease;
+    }
+
+    .navbar-brand img:hover {
+      transform: scale(1.05);
+    }
+
+    .navbar-nav .nav-link {
+      color: white !important;
+      font-weight: 500;
+      margin: 0 10px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .navbar-nav .nav-link:hover {
+      color: var(--primary-color) !important;
+      transform: translateY(-2px);
+    }
+
+    .navbar-nav .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      transition: width 0.3s ease;
+    }
+
+    .navbar-nav .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .navbar-toggler {
+      border: none;
+      color: white;
+    }
+
+    .navbar-toggler:focus {
+      box-shadow: none;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: var(--gradient-bg);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+      pointer-events: none;
+    }
+
+    .hero .container {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #ffffff 0%, var(--primary-color) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      font-weight: 300;
+      margin-bottom: 2rem;
+    }
+
+    .hero-img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .hero-img:hover {
+      transform: scale(1.02);
+    }
+
+    /* Section Styling */
+    .section-padding {
+      padding: 100px 0;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      border-radius: 2px;
+    }
+
+    /* Services Section */
+    .services {
+      background: var(--light-gradient);
+    }
+
+    .service-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      border: none;
+      position: relative;
+      overflow: hidden;
+      height: 100%;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(79, 195, 247, 0.1), transparent);
+      transition: left 0.6s;
+    }
+
+    .service-card:hover::before {
+      left: 100%;
+    }
+
+    .service-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+
+    .service-icon {
+      font-size: 3rem;
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #1a1a1a;
+    }
+
+    .service-card p {
+      color: #666;
+      margin-bottom: 0;
+    }
+
+    /* Why Section */
+    .why-item {
+      text-align: center;
+      padding: 2rem 1rem;
+      transition: all 0.3s ease;
+      border-radius: 15px;
+    }
+
+    .why-item:hover {
+      transform: translateY(-5px);
+      background: #f8fafc;
+    }
+
+    .why-icon {
+      font-size: 2.5rem;
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+    }
+
+    .why-item h4 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #1a1a1a;
+    }
+
+    .why-item p {
+      color: #666;
+      margin-bottom: 0;
+    }
+
+    /* Contact Section */
+    .contact {
+      background: var(--gradient-bg);
+      color: white;
+    }
+
+    .contact .section-title {
+      color: white;
+    }
+
+    .contact-info {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2.5rem;
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      height: 100%;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-item i {
+      font-size: 1.2rem;
+      color: var(--primary-color);
+      width: 30px;
+      margin-right: 15px;
+    }
+
+    .contact-form {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2.5rem;
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      height: 100%;
+    }
+
+    .contact-form .form-control,
+    .contact-form .form-select {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: white;
+      padding: 12px 16px;
+    }
+
+    .contact-form .form-control:focus,
+    .contact-form .form-select:focus {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--primary-color);
+      box-shadow: none;
+      color: white;
+    }
+
+    .contact-form .form-control::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .contact-form .form-label {
+      color: #e2e8f0;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Footer */
+    .footer {
+      background: #0a1520;
+      color: white;
+      padding: 60px 0 30px;
+    }
+
+    .footer h5 {
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+    }
+
+    .footer a {
+      color: #cbd5e0;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer a:hover {
+      color: var(--primary-color);
+    }
+
+    .footer-logo {
+      height: 50px;
+      margin-bottom: 1rem;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid #2d3748;
+      padding-top: 2rem;
+      margin-top: 2rem;
+      text-align: center;
+      color: #a0aec0;
+    }
+
+    /* Alert styles */
+    .alert-success {
+      background: linear-gradient(135deg, #4caf50, #66bb6a);
+      border: none;
+      color: white;
+      border-radius: 10px;
+    }
+
+    .alert-danger {
+      background: linear-gradient(135deg, #f44336, #ef5350);
+      border: none;
+      color: white;
+      border-radius: 10px;
+    }
+
+    /* Custom animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in-up {
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .hero {
+        text-align: center;
+        padding: 100px 0 60px;
+      }
+      
+      .section-padding {
+        padding: 60px 0;
+      }
+      
+      .contact-form,
+      .contact-info {
+        margin-bottom: 2rem;
+      }
+    }
+  </style>
 </head>
 <body>
-
-  <header class="header">
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="navbar">
     <div class="container">
-      <img src="logo.png" alt="FilaPrint3D logo" class="logo"/>
-      <nav>
-        <ul class="nav-links">
-          <li><a href="#servicios">Servicios</a></li>
-          <li><a href="#porque">¿Por qué elegirnos?</a></li>
-          <li><a href="#contacto">Contacto</a></li>
+      <a class="navbar-brand" href="#home">
+        <img src="logo.png" alt="FilaPrint3D logo" />
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#servicios">Servicios</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#porque">¿Por qué elegirnos?</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#contacto">Contacto</a>
+          </li>
         </ul>
-      </nav>
-    </div>
-  </header>
-
-  <section class="hero">
-    <div class="container hero-content">
-      <div>
-        <h1>Diseño e Impresión 3D</h1>
-        <p>Servicios profesionales de impresión y modelado 3D para tus proyectos.</p>
-        <a href="#contacto" class="btn">Solicitar Cotización</a>
       </div>
-      <img src="impresora.png" alt="Impresora 3D" class="hero-img"/>
     </div>
-  </section>
+  </nav>
 
-  <section id="servicios" class="services">
+  <!-- Hero Section -->
+  <section id="home" class="hero">
     <div class="container">
-      <h2>Nuestros Servicios</h2>
-      <div class="cards">
-        <div class="card">
-          <h3>Impresión 3D</h3>
-          <p>Impresiones de alta calidad para prototipos, piezas funcionales y más.</p>
+      <div class="row align-items-center">
+        <div class="col-lg-6" data-aos="fade-up">
+          <h1>Diseño e Impresión 3D</h1>
+          <p class="lead">Servicios profesionales de impresión y modelado 3D para transformar tus ideas en realidad con la más alta calidad y precisión.</p>
+          <a href="#contacto" class="btn btn-primary btn-lg">
+            <i class="fas fa-rocket me-2"></i>
+            Solicitar Cotización
+          </a>
         </div>
-        <div class="card">
-          <h3>Modelado 3D</h3>
-          <p>Creación de modelos 3D personalizados según tus especificaciones.</p>
-        </div>
-        <div class="card">
-          <h3>Prototipado</h3>
-          <p>Prototipado rápido para dar vida a tus ideas de forma ágil.</p>
+        <div class="col-lg-6 text-center" data-aos="fade-left">
+          <img src="impresora.png" alt="Impresora 3D profesional" class="hero-img img-fluid" />
         </div>
       </div>
     </div>
   </section>
 
-  <section id="porque" class="why">
+  <!-- Services Section -->
+  <section id="servicios" class="services section-padding">
     <div class="container">
-      <h2>¿Por qué elegirnos?</h2>
-      <div class="reasons">
-        <div>
-          <h4>Experiencia</h4>
-          <p>Años de experiencia en diseño e impresión 3D.</p>
+      <h2 class="section-title">Nuestros Servicios</h2>
+      <div class="row g-4">
+        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+          <div class="card service-card h-100">
+            <div class="card-body">
+              <div class="service-icon">
+                <i class="fas fa-print"></i>
+              </div>
+              <h3>Impresión 3D</h3>
+              <p>Impresiones de alta calidad para prototipos, piezas funcionales y productos finales con tecnología de vanguardia.</p>
+            </div>
+          </div>
         </div>
-        <div>
-          <h4>Calidad</h4>
-          <p>Comprometidos con resultados de alta calidad.</p>
+        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+          <div class="card service-card h-100">
+            <div class="card-body">
+              <div class="service-icon">
+                <i class="fas fa-cube"></i>
+              </div>
+              <h3>Modelado 3D</h3>
+              <p>Creación de modelos 3D personalizados según tus especificaciones exactas con software profesional.</p>
+            </div>
+          </div>
         </div>
-        <div>
-          <h4>Soporte</h4>
-          <p>Acompañamiento dedicado durante todo tu proyecto.</p>
+        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+          <div class="card service-card h-100">
+            <div class="card-body">
+              <div class="service-icon">
+                <i class="fas fa-cogs"></i>
+              </div>
+              <h3>Prototipado</h3>
+              <p>Prototipado rápido para dar vida a tus ideas de forma ágil y eficiente en el menor tiempo posible.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <footer id="contacto" class="footer">
+  <!-- Why Choose Us Section -->
+  <section id="porque" class="section-padding">
     <div class="container">
-      <img src="logo.png" alt="FilaPrint3D logo" class="footer-logo"/>
-      <nav>
-        <ul>
-          <li><a href="#servicios">Servicios</a></li>
-          <li><a href="#porque">¿Por qué elegirnos?</a></li>
-          <li><a href="#contacto">Contacto</a></li>
-        </ul>
-      </nav>
-      <p>© 2025 FilaPrint3D. Todos los derechos reservados.</p>
+      <h2 class="section-title">¿Por qué elegirnos?</h2>
+      <div class="row g-4">
+        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+          <div class="why-item">
+            <div class="why-icon">
+              <i class="fas fa-award"></i>
+            </div>
+            <h4>Experiencia</h4>
+            <p>Años de experiencia en diseño e impresión 3D con cientos de proyectos exitosos.</p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+          <div class="why-item">
+            <div class="why-icon">
+              <i class="fas fa-gem"></i>
+            </div>
+            <h4>Calidad</h4>
+            <p>Comprometidos con resultados de alta calidad usando los mejores materiales y equipos.</p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+          <div class="why-item">
+            <div class="why-icon">
+              <i class="fas fa-headset"></i>
+            </div>
+            <h4>Soporte</h4>
+            <p>Acompañamiento dedicado durante todo tu proyecto con atención personalizada 24/7.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contacto" class="contact section-padding">
+    <div class="container">
+      <h2 class="section-title">Contacta con Nosotros</h2>
+      <div class="row g-4">
+        <div class="col-lg-6" data-aos="fade-up">
+          <div class="contact-info">
+            <h3 class="mb-4">Información de Contacto</h3>
+            <div class="contact-item">
+              <i class="fas fa-envelope"></i>
+              <span>info@filaprint3d.com</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-phone"></i>
+              <span>+506 1234-5678</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>San José, Costa Rica</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-clock"></i>
+              <span>Lunes a Viernes: 8:00 AM - 6:00 PM</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+          <div class="contact-form">
+            <div class="alert alert-success d-none" id="successAlert">
+              <i class="fas fa-check-circle me-2"></i>
+              ¡Mensaje enviado exitosamente! Te contactaremos pronto.
+            </div>
+            <div class="alert alert-danger d-none" id="errorAlert">
+              <i class="fas fa-exclamation-circle me-2"></i>
+              Error al enviar el mensaje. Por favor, intenta nuevamente.
+            </div>
+            
+            <form id="contactForm">
+              <div class="mb-3">
+                <label for="name" class="form-label">Nombre completo *</label>
+                <input type="text" class="form-control" id="name" name="name" required placeholder="Tu nombre completo">
+              </div>
+              
+              <div class="mb-3">
+                <label for="email" class="form-label">Correo electrónico *</label>
+                <input type="email" class="form-control" id="email" name="email" required placeholder="tu@email.com">
+              </div>
+              
+              <div class="mb-3">
+                <label for="phone" class="form-label">Teléfono</label>
+                <input type="tel" class="form-control" id="phone" name="phone" placeholder="+506 1234-5678">
+              </div>
+              
+              <div class="mb-3">
+                <label for="service" class="form-label">Servicio de interés</label>
+                <select class="form-select" id="service" name="service">
+                  <option value="">Selecciona un servicio</option>
+                  <option value="impresion">Impresión 3D</option>
+                  <option value="modelado">Modelado 3D</option>
+                  <option value="prototipado">Prototipado</option>
+                  <option value="consulta">Consulta general</option>
+                </select>
+              </div>
+              
+              <div class="mb-3">
+                <label for="message" class="form-label">Mensaje *</label>
+                <textarea class="form-control" id="message" name="message" rows="4" required placeholder="Describe tu proyecto o consulta..."></textarea>
+              </div>
+              
+              <button type="submit" class="btn btn-primary w-100">
+                <i class="fas fa-paper-plane me-2"></i>
+                Enviar Mensaje
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <img src="logo.png" alt="FilaPrint3D logo" class="footer-logo" />
+          <p>Transformamos tus ideas en realidad a través de tecnología de impresión 3D de vanguardia.</p>
+        </div>
+        <div class="col-lg-4">
+          <h5>Servicios</h5>
+          <ul class="list-unstyled">
+            <li><a href="#servicios">Impresión 3D</a></li>
+            <li><a href="#servicios">Modelado 3D</a></li>
+            <li><a href="#servicios">Prototipado</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4">
+          <h5>Contacto</h5>
+          <p>info@filaprint3d.com<br>
+          +506 1234-5678<br>
+          San José, Costa Rica</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 FilaPrint3D. Todos los derechos reservados.</p>
+      </div>
     </div>
   </footer>
 
+  <!-- Bootstrap JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+  <!-- AOS Animation Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  
+  <script>
+    // Initialize AOS
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true
+    });
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', function() {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 100) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          const navbarHeight = document.querySelector('.navbar').offsetHeight;
+          const targetPosition = target.offsetTop - navbarHeight;
+          
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          });
+
+          // Close mobile menu if open
+          const navbarCollapse = document.querySelector('.navbar-collapse');
+          if (navbarCollapse.classList.contains('show')) {
+            bootstrap.Collapse.getInstance(navbarCollapse).hide();
+          }
+        }
+      });
+    });
+
+    // Contact form submission
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const successAlert = document.getElementById('successAlert');
+      const errorAlert = document.getElementById('errorAlert');
+      
+      // Hide previous alerts
+      successAlert.classList.add('d-none');
+      errorAlert.classList.add('d-none');
+      
+      // Get form data
+      const name = formData.get('name');
+      const email = formData.get('email');
+      const phone = formData.get('phone');
+      const service = formData.get('service');
+      const message = formData.get('message');
+      
+      // Create mailto link
+      const subject = `Consulta de ${name} - ${service || 'Servicio general'}`;
+      const body = `Nombre: ${name}
+Email: ${email}
+Teléfono: ${phone || 'No proporcionado'}
+Servicio de interés: ${service || 'No especificado'}
+
+Mensaje:
+${message}`;
+      
+      const mailtoLink = `mailto:info@filaprint3d.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      
+      try {
+        // Open email client
+        window.location.href = mailtoLink;
+        
+        // Show success message
+        successAlert.classList.remove('d-none');
+        
+        // Reset form
+        this.reset();
+        
+        // Scroll to success message
+        successAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+      } catch (error) {
+        // Show error message
+        errorAlert.classList.remove('d-none');
+        errorAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  </script>
 </body>
 </html>
