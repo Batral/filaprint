@@ -55,7 +55,7 @@ form.addEventListener('submit', (e) => {
   status.textContent = 'Enviando mensaje...';
   status.className = 'form-status';
 
-  emailjs.send("service_rswkq7s", "template_m83obwl", {
+  emailjs.send("service_rswkq7s", "template_3cfpe3f", {
     name: data.name,
     email: data.email,
     phone: data.phone || "No proporcionado",
