@@ -24,23 +24,57 @@ const io = new IntersectionObserver((entries) => {
 document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
 
 // Contact form
+// Contact form (EmailJS)
 const form = document.getElementById('contactForm');
 const status = document.getElementById('formStatus');
+
+// Init EmailJS
+(function () {
+  emailjs.init("Gx8OIY0nGTkxc3HwT");
+})();
+
 form.addEventListener('submit', (e) => {
   e.preventDefault();
+
   const data = Object.fromEntries(new FormData(form));
+
+  // Validations (keep yours)
   if (!data.name || !data.email || !data.message) {
     status.textContent = 'Por favor completa los campos requeridos.';
     status.className = 'form-status error';
     return;
   }
+
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
     status.textContent = 'Ingresa un correo electrónico válido.';
     status.className = 'form-status error';
     return;
   }
-  status.textContent = '¡Mensaje enviado! Te contactaremos pronto.';
-  status.className = 'form-status success';
-  form.reset();
-  setTimeout(() => { status.textContent = ''; status.className = 'form-status'; }, 5000);
+
+  // UX: loading state
+  status.textContent = 'Enviando mensaje...';
+  status.className = 'form-status';
+
+  emailjs.send("service_rah475j", "template_m83obwl", {
+    name: data.name,
+    email: data.email,
+    phone: data.phone || "No proporcionado",
+    service: data.service || "No especificado",
+    message: data.message
+  })
+  .then(() => {
+    status.textContent = '¡Mensaje enviado! Te contactaremos pronto.';
+    status.className = 'form-status success';
+    form.reset();
+
+    setTimeout(() => {
+      status.textContent = '';
+      status.className = 'form-status';
+    }, 5000);
+  })
+  .catch((error) => {
+    console.error('EmailJS error:', error);
+    status.textContent = 'Error al enviar el mensaje. Intenta de nuevo.';
+    status.className = 'form-status error';
+  });
 });
